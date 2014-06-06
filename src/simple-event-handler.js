@@ -9,7 +9,7 @@ var _document = null;
 var _origin = '';
 var _idCount = 0;
 
-if (__inBrowser || __inWorker) {
+if (_inBrowser || _inWorker) {
     var location = global.location;
 
     _origin = location.origin || (location.protocol + '//' + location.hostname);
@@ -165,7 +165,7 @@ function _trigger(event, data) {
 
     data && (event.data = data);
     eventParam.data = event;
-    this.iframeWindow.postMessage(eventType, origin);
+    this.iframeWindow.postMessage(eventType, _origin);
 }
 
 /**
@@ -246,7 +246,7 @@ function _getEvent(eventType) {
  */
 function _handleEvent(ev) {
     // originがちがう子はそもそも受け付けない
-    if (origin !== ev.origin) {
+    if (_origin !== ev.origin) {
         return;
     }
     this.callHandlers(ev.data);
@@ -311,7 +311,7 @@ if (_useRequireJS) {
 } else if (_inNode) {
     module.exports = instance;
 } else {
-    global.simpleEventHandler = instance();
+    global.simpleEventHandler = instance;
 }
 
 })((this || 0).self || global);
