@@ -6,7 +6,7 @@ var jshintStylish = require('jshint-stylish');
 var shell = require('gulp-shell');
 var rename = require('gulp-rename');
 var pkg = require('./package.json');
-var banner = '/*! <%= name %> // @version <%= version %>, @license <%= license %>, @Author <%= author %> */\n';
+var banner = '/*! <%= name %> // @version <%= version %>, @license <%= license %>, @author <%= author %> */\n';
 
 var SRC_FILES = 'src/**/*.js';
 
