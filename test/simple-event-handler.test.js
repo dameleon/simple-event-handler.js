@@ -75,7 +75,7 @@ describe('SimpleEventHandler', function() {
             }, 150);
         });
 
-        it('should be fired callback function by past triggered event', function(done) {
+        it('should be fired the callback function by past triggered event', function(done) {
             var that = this;
 
             this.simpleEventHandler.trigger(this.eventName);
@@ -85,5 +85,13 @@ describe('SimpleEventHandler', function() {
             });
         });
 
+        it('should be fired the callback function with triggerSync method', function() {
+            var that = this;
+
+            this.simpleEventHandler.on(this.eventName, function(ev) {
+                assert(that.eventName === ev.type);
+            });
+            this.simpleEventHandler.triggerSync(this.eventName);
+        });
     });
 });

@@ -4,7 +4,8 @@
   "description": "simple event handler module",
   "main": "simple-event-handler.min.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "develop": "npm install -g gulp mocha karma-cli phantomjs browserify"
   },
   "repository": {
     "type": "git",
