@@ -1,0 +1,40 @@
+{
+  "name": "simple-event-handler.js",
+  "version": "0.0.0",
+  "description": "simple event handler module",
+  "main": "simple-event-handler.min.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dameleon/simple-event-handler.js.git"
+  },
+  "keywords": [
+    "eventhandler",
+    "browser"
+  ],
+  "author": "dameleon <dameleon@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dameleon/simple-event-handler.js/issues"
+  },
+  "homepage": "https://github.com/dameleon/simple-event-handler.js",
+  "devDependencies": {
+    "gulp": "~3.7.0",
+    "gulp-header": "~1.0.2",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-mocha": "~0.1.3",
+    "jshint-stylish": "~0.2.0",
+    "gulp-karma": "0.0.4",
+    "gulp-uglify": "~0.3.0",
+    "mocha": "~1.20.1",
+    "power-assert": "~0.7.2",
+    "espowerify": "~0.7.1",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "gulp-jshint": "~1.6.2",
+    "karma-browserifast": "~0.6.1",
+    "browserify": "~4.1.8",
+    "karma": "~0.12.16"
+  }
+}
