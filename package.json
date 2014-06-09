@@ -1,6 +1,6 @@
 {
   "name": "simple-event-handler.js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "simple event handler module",
   "main": "simple-event-handler.min.js",
   "scripts": {
