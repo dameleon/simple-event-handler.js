@@ -2,7 +2,7 @@
 'use strict';
 
 var _inNode = 'process' in global;
-var _inWorker = 'WorlerLocation' in global;
+var _inWorker = 'WorkerLocation' in global;
 var _inBrowser = 'document' in global;
 var _useRequireJS = !_inNode && (typeof global.define === 'function' && global.define.amd);
 var _document = null;
@@ -119,7 +119,7 @@ function _ready(eventType, handler) {
 
     if (event.isCalled) {
         if (!event.data) {
-            event.data = document.createEvent(eventType);
+            event.data = _document.createEvent(eventType);
         }
         return __fire(handler, event);
     } else if (__getIndexByHandler(handlers, handler) > -1) {
@@ -266,7 +266,7 @@ function _createNewInstance() {
 /////////// Private methods
 
 function __createEmptyEvent(type) {
-    var event = document.createEvent('Event');
+    var event = _document.createEvent('Event');
 
     event.initEvent(type, true, true);
     return event;
