@@ -300,9 +300,9 @@ function __registerHandler(handler, isOnce) {
 }
 
 function __generateNum() {
-    var res = __generateNum.count++;
+    var res = __generateNum.count;
 
-    if (__generateNum.count === Number.MAX_VALUE) {
+    if (++__generateNum.count >= 0x1fffffffffffff) {
         __generateNum.count = 0;
     }
     return res;
