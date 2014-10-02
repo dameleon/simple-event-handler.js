@@ -1,6 +1,7 @@
 'use strict';
 
 var assert = require('power-assert');
+var _ = require('lodash');
 
 describe('SimpleEventHandler', function() {
     before(function() {
@@ -32,11 +33,11 @@ describe('SimpleEventHandler', function() {
             this.simpleEventHandler.off(this.eventName);
         });
 
-        it('should be create new instance', function() {
+        it('should create new instance', function() {
             assert(!!this.simpleEventHandler);
         });
 
-        it('should be fired the callback function', function(done) {
+        it('should fired the callback function', function(done) {
             var that = this;
 
             this.simpleEventHandler.on(this.eventName, function(ev) {
@@ -46,7 +47,7 @@ describe('SimpleEventHandler', function() {
             this.simpleEventHandler.trigger(this.eventName);
         });
 
-        it('should be fired the handleEvent in object', function(done) {
+        it('should fired the handleEvent in object', function(done) {
             var that = this;
 
             this.simpleEventHandler.on(this.eventName, {
@@ -58,7 +59,26 @@ describe('SimpleEventHandler', function() {
             this.simpleEventHandler.trigger(this.eventName);
         });
 
-        it('should be not fired the callback function when called off method', function(done) {
+        it('should fired different events when multiple triggered', function(done) {
+            var that = this;
+            var eventObjects = [];
+            var q = function(ev) {
+                eventObjects.push(ev);
+                q.count++
+                if (q.count === q.limit) {
+                    assert(_.unique(eventObjects).length === q.limit);
+                    done();
+                }
+            };
+
+            q.count = 0;
+            q.limit = 2;
+            this.simpleEventHandler.on(this.eventName, q);
+            this.simpleEventHandler.trigger(this.eventName);
+            this.simpleEventHandler.trigger(this.eventName);
+        });
+
+        it('should not fired the callback function when called off method', function(done) {
             var cb = function(reason) {
                 assert(reason === 'timeout');
                 done();
@@ -75,7 +95,7 @@ describe('SimpleEventHandler', function() {
             }, 150);
         });
 
-        it('should be fired the callback function by past triggered event', function(done) {
+        it('should fired the callback function by past triggered event', function(done) {
             var that = this;
 
             this.simpleEventHandler.trigger(this.eventName);
@@ -85,7 +105,7 @@ describe('SimpleEventHandler', function() {
             });
         });
 
-        it('should be fired the callback function with triggerSync method', function() {
+        it('should fired the callback function with triggerSync method', function() {
             var that = this;
 
             this.simpleEventHandler.on(this.eventName, function(ev) {
