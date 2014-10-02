@@ -40,6 +40,7 @@ function SimpleEventHandler() {
     iframe.style.display = 'none';
     _document.body.appendChild(iframe);
 
+    this.eventTypeSeparator = '//';
     this.iframeWindow = iframe.contentWindow;
     this.events = {};
     this.iframeWindow.addEventListener('message', this);
@@ -118,10 +119,7 @@ function _ready(eventType, handler) {
     var handlers = event.handlers;
 
     if (event.isCalled) {
-        if (!event.data) {
-            event.data = _document.createEvent(eventType);
-        }
-        return __fire(handler, event);
+        return __fire(handler, _document.createEvent(eventType));
     } else if (__getIndexByHandler(handlers, handler) > -1) {
         return false;
     }
@@ -153,6 +151,7 @@ function _once(eventType, handler) {
  * @param {Any}          data   the data to attach to event
  */
 function _trigger(event, data) {
+    var id = __generateNum();
     var eventType;
 
     if (typeof event === 'string') {
@@ -164,8 +163,8 @@ function _trigger(event, data) {
     var eventParam = this.getEvent(eventType);
 
     data && (event.data = data);
-    eventParam.data = event;
-    this.iframeWindow.postMessage(eventType, _origin);
+    eventParam.datas[id] = event;
+    this.iframeWindow.postMessage(eventType + this.eventTypeSeparator + id, _origin);
 }
 
 /**
@@ -177,6 +176,7 @@ function _trigger(event, data) {
  *
  */
 function _triggerSync(event, data) {
+    var id = __generateNum();
     var eventType;
 
     if (typeof event === 'string') {
@@ -188,8 +188,8 @@ function _triggerSync(event, data) {
     var eventParam = this.getEvent(eventType);
 
     data && (event.data = data);
-    eventParam.data = event;
-    this.callHandlers(eventType);
+    eventParam.datas[id] = event;
+    this.callHandlers(eventType, id);
 }
 
 /**
@@ -197,11 +197,12 @@ function _triggerSync(event, data) {
  *
  * @name callHandlers
  * @param {String} eventType  event type name
+ * @param {Number} id  event identifier number
  */
-function _callHandlers(eventType) {
+function _callHandlers(eventType, id) {
     var event = this.getEvent(eventType);
     var handlers = event.handlers;
-    var data = event.data;
+    var data = event.datas[id];
     var deletes = [];
     var i, val;
 
@@ -214,7 +215,7 @@ function _callHandlers(eventType) {
             deletes[deletes.length] = val;
         }
     }
-    event.data = null;
+    event.datas[id] = null;
     for (i = 0;
         (val = deletes[i]); i++) {
         var index = handlers.indexOf(val);
@@ -234,7 +235,7 @@ function _getEvent(eventType) {
     return this.events[eventType] || (this.events[eventType] = {
         isCalled: false,
         handlers: [],
-        data: null
+        datas: {},
     });
 }
 
@@ -249,7 +250,9 @@ function _handleEvent(ev) {
     if (_origin !== ev.origin) {
         return;
     }
-    this.callHandlers(ev.data);
+    var info = ev.data.split(this.eventTypeSeparator);
+
+    this.callHandlers(info[0], info[1]);
 }
 
 /**
@@ -295,6 +298,16 @@ function __registerHandler(handler, isOnce) {
         isOnce: !! isOnce
     };
 }
+
+function __generateNum() {
+    var res = __generateNum.count++;
+
+    if (__generateNum.count === Number.MAX_VALUE) {
+        __generateNum.count = 0;
+    }
+    return res;
+}
+__generateNum.count = 0;
 
 
 ////////////////////////////////////////
